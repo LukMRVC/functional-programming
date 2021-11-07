@@ -38,7 +38,7 @@ sweepField f = sweepLine [0..length f - 1] f where
             let
                 minesAbove = if (lineIdx - 1) < 0 then 0 else length $ filter (=='*') $ take (length $ filter (>=0) [charIdx-1..charIdx + 1]) $ drop (charIdx - 1) $ elemAt (lineIdx - 1) f
                 minesBySide = length $ filter (=='*') $ take (length $ filter (>=0) [charIdx-1..charIdx+1]) $ drop (charIdx - 1) $ elemAt lineIdx f
-                minesBelow = if (lineIdx + 1) >= length f then 0 else  length $ filter (=='*') $ take (length $ filter (>=0) [charIdx-1..charIdx + 1]) $ drop (charIdx - 1) $ elemAt (lineIdx + 1) f
+                minesBelow = if (lineIdx + 1) >= length f then 0 else length $ filter (=='*') $ take (length $ filter (>=0) [charIdx-1..charIdx + 1]) $ drop (charIdx - 1) $ elemAt (lineIdx + 1) f
                 result = if c == '*' then '*':checkNeighbours (charIdx + 1) lineIdx lineStr 
                 else intoChar (minesBySide + minesAbove + minesBelow): checkNeighbours (charIdx + 1) lineIdx lineStr
             in result
