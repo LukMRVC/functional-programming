@@ -66,7 +66,13 @@ orBetweenAutomatons (a1, s1, i1, o1, t1) (a2, s2, i2, o2, t2) = (
 -- Add input state, make it output state and epsilon transition to input state and from output state to 
 -- the added state
 iterateAutomaton :: NGFA -> NGFA
-iterateAutomaton x = x
+iterateAutomaton (a1, s1, i1, o1, t1) = (
+    a1,
+    0: (map (+1) s1),
+    [0],
+    [0] ++ (map (+1) o1),
+    fromOutToIn [0] (map (+1) i1) ++ fromOutToIn (map (+1) o1) [0] ++ replaceTransitions t1 1
+    )
 
 
 -- if regex is epsilon, then NGFA is 1 state, that is input and output output, no need for transition functions or whatever
