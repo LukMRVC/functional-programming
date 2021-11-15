@@ -36,8 +36,14 @@ type NGFA = ([Char], [State], [State], [State], [(State, Input, State)])
 
 
 -- There will be needed some helper functions, eg. concatenate automatons
-concatAutomaton:: NGFA -> NGFA -> NGFA
-concatAutomaton x y = y
+
+-- Merge states
+-- From first `x` get rid of output states, keep input states
+-- From second `y` get rid of input states, keep output states
+-- Add epsilon transition from first `x` output state to second `y` input state 
+
+concatAutomaton:: NGFA -> NGFA -> [Int]
+concatAutomaton (a1, s1, i1, o1, t1) (a2, s2, i2, o2, t2) = [(maximum s1 + 1)..(maximum s2 + length s2)]
 
 orBetweenAutomatons :: NGFA -> NGFA -> NGFA
 orBetweenAutomatons x y = y
@@ -52,6 +58,9 @@ regexToNgfa :: Regex -> NGFA
 regexToNgfa Epsilon = ([], [0], [0], [0], [])
 regexToNgfa (Lit a) = ([a], [0, 1], [0], [1], [(0, a, 1)])
 regexToNgfa (It x) = iterateAutomaton (regexToNgfa x)
-regexToNgfa (Con x y) = concatAutomaton (regexToNgfa x) (regexToNgfa y)
+-- regexToNgfa (Con x y) = concatAutomaton (regexToNgfa x) (regexToNgfa y)
 regexToNgfa (Or x y) = orBetweenAutomatons (regexToNgfa x) (regexToNgfa y)
 regexToNgfa (Grp x) = regexToNgfa x
+
+sample1 = regexToNgfa (Lit 'a')
+sample2 = regexToNgfa (Lit 'b')
