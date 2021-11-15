@@ -10,13 +10,6 @@ data Shape = Circle Point Int
            | Rectangle {topLeft:: Point, bottomRight::Point}
           deriving (Show)
 
-drawCircle :: [Point] -> Result
-drawCircle pos = let
-    rows = map (\ (Point x y) -> x) pos
-    columns = map (\ (Point x y) -> y) pos
-    (minRow, maxRow) = (minimum rows, maximum rows)
-    (minCol, maxCol) = (minimum columns, maximum columns)
-    in [[if Point row column `elem` pos then 'X' else ' ' | column <- [minCol..maxCol]  ]| row <- [minRow..maxRow]]
 
 recalcD :: Int -> Int -> Int -> Int -> Int
 recalcD x y d 0 = d + 4 * (x - y) + 10
