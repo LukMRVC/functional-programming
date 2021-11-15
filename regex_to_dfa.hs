@@ -52,9 +52,19 @@ concatAutomaton (a1, s1, i1, o1, t1) (a2, s2, i2, o2, t2) = (
     t1 ++ fromOutToIn o1 [x + (maximum s1 + 1) | x <- i2] ++ replaceTransitions t2 (maximum s1 + 1)
     )
 
+-- Add input state, and epsilon transitions to `x` and `y`
 orBetweenAutomatons :: NGFA -> NGFA -> NGFA
-orBetweenAutomatons x y = y
+orBetweenAutomatons (a1, s1, i1, o1, t1) (a2, s2, i2, o2, t2) = (
+    a1 ++ a2,
+    [0] ++ [x + 1 | x <- s1] ++ [x + (maximum [x + 1 | x <- s1] + 1) | x <- s2],
+    [0],
+    (map (+1) o1) ++ [x + (maximum [x + 1 | x <- s1] + 1) | x <- o2],
+    fromOutToIn [0] (map (+1) i1) ++ fromOutToIn [0] [x + 2 + (maximum s1) | x <- i2] ++ replaceTransitions t1 1 ++ replaceTransitions t2 (maximum [x + 1 | x <- s1] + 1)
+    )
 
+
+-- Add input state, make it output state and epsilon transition to input state and from output state to 
+-- the added state
 iterateAutomaton :: NGFA -> NGFA
 iterateAutomaton x = x
 
